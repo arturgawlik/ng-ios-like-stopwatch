@@ -11,9 +11,9 @@ import { Component, OnInit } from '@angular/core';
     }
   `],
   template: `
-    <div class="bg-black wrapper border relative w-screen h-screen">
+    <div class="bg-black wrapper sm:border relative w-screen h-screen">
       <router-outlet></router-outlet>
-      <div class="absolute inset-x-0 bottom-0">
+      <div class="fixed sm:absolute inset-x-0 bottom-0">
         <app-clock-application-bottom-navigation></app-clock-application-bottom-navigation>
       </div>
     </div>
