@@ -33,7 +33,7 @@ export class SvgComponent implements OnInit{
     if (this.svgContainer as ElementRef) {
       const svgElem = this.svgContainer?.nativeElement.querySelector<SVGElement>('svg');
       if (svgElem) {
-        svgElem.classList.forEach(currentClass => svgElem.classList.remove(currentClass));
+        svgElem.className.baseVal = '';
         if (this.svgClassInternal) {
           this.svgClassInternal.split(' ').forEach(svgClass => {
             svgElem.classList.add(svgClass);

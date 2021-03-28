@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-clock-application-stopwatch',
+  selector: 'app-clock-application-alarm',
   template: `
     <div class="text-white">
-    stopwatch todo
+      alarm todo
     </div>
   `
 })
-export class ClockApplicationStopwatchComponent implements OnInit {
+export class ClockApplicationAlarmComponent implements OnInit {
 
   constructor() { }
 

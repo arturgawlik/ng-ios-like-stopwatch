@@ -11,6 +11,9 @@ import {HttpClientModule} from '@angular/common/http';
 import { SafePipe } from './pipes/safe.pipe';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { ClockApplicationWorldClocksComponent } from './clock-application/clock-application-world-clocks/clock-application-world-clocks.component';
+import { ClockApplicationAlarmComponent } from './clock-application/clock-application-alarm/clock-application-alarm.component';
+import { ClockApplicationCountdownTimerComponent } from './clock-application/clock-application-countdown-timer/clock-application-countdown-timer.component';
 
 @NgModule({
   declarations: [
@@ -19,14 +22,20 @@ import { environment } from '../environments/environment';
     ClockApplicationStopwatchComponent,
     ClockApplicationBottomNavigationComponent,
     SvgComponent,
-    SafePipe
+    SafePipe,
+    ClockApplicationWorldClocksComponent,
+    ClockApplicationAlarmComponent,
+    ClockApplicationCountdownTimerComponent
   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot([
       {path: 'clock-application', component: ClockApplicationComponent,
       children: [
+        {path: 'world-clocks', component: ClockApplicationWorldClocksComponent},
+        {path: 'alarm', component: ClockApplicationAlarmComponent},
         {path: 'stopwatch', component: ClockApplicationStopwatchComponent},
+        {path: 'countdown-timer', component: ClockApplicationCountdownTimerComponent},
         {path: '', redirectTo: 'stopwatch', pathMatch: 'full'},
       ]},
       {path: '', redirectTo: 'clock-application', pathMatch: 'full'},

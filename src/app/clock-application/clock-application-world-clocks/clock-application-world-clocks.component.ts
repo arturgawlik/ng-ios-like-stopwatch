@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-clock-application-stopwatch',
+  selector: 'app-clock-application-world-clocks',
   template: `
     <div class="text-white">
-    stopwatch todo
+      world clock todo
     </div>
   `
 })
-export class ClockApplicationStopwatchComponent implements OnInit {
+export class ClockApplicationWorldClocksComponent implements OnInit {
 
   constructor() { }
 
