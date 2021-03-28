@@ -18,25 +18,25 @@ import { Component, OnInit } from '@angular/core';
         <nav class="flex items-end w-full">
           <a routerLink="/world-clocks" class="mx-auto flex flex-col items-center cursor-pointer">
             <app-svg svgPath="/assets/svgs/earth.svg" containerClass="" svgClass="h-7"></app-svg>
-            <span class="fontSize color mt-1">
+            <span class="fontSize color mt-1 whitespace-nowrap">
               Zegary Świata
             </span>
           </a>
           <a routerLink="/alarm" class="mx-auto flex flex-col items-center cursor-pointer">
             <app-svg svgPath="/assets/svgs/clock.svg" containerClass="" svgClass="h-7"></app-svg>
-            <span class="fontSize color mt-1">
+            <span class="fontSize color mt-1 whitespace-nowrap">
               Budzik
             </span>
           </a>
           <a routerLink="/stopwatch" class="mx-auto flex flex-col items-center cursor-pointer">
             <app-svg svgPath="/assets/svgs/stopwatch.svg" containerClass="" svgClass="h-7 fill-current text-yellow-600"></app-svg>
-            <span class="fontSize mt-1 text-yellow-600">
+            <span class="fontSize mt-1 text-yellow-600 whitespace-nowrap">
               Stoper
             </span>
           </a>
           <a routerLink="/countdown-timer" class="mx-auto flex flex-col items-center cursor-pointer">
             <app-svg svgPath="/assets/svgs/countdownTimer.svg" containerClass="" svgClass="h-7"></app-svg>
-            <span class="fontSize color mt-1">
+            <span class="fontSize color mt-1 whitespace-nowrap">
               Minutnik
             </span>
           </a>
