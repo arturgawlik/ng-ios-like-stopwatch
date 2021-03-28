@@ -9,6 +9,8 @@ import {RouterModule} from '@angular/router';
 import { SvgComponent } from './clock-application/components/svg/svg.component';
 import {HttpClientModule} from '@angular/common/http';
 import { SafePipe } from './pipes/safe.pipe';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,8 @@ import { SafePipe } from './pipes/safe.pipe';
       ]},
       {path: '', redirectTo: 'clock-application', pathMatch: 'full'},
     ]),
-    HttpClientModule
+    HttpClientModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent]
