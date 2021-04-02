@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-clock-application-countdown-timer',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="text-white">
       count down timer todo
