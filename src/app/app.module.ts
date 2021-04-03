@@ -14,6 +14,7 @@ import { environment } from '../environments/environment';
 import { ClockApplicationWorldClocksComponent } from './clock-application/clock-application-world-clocks/clock-application-world-clocks.component';
 import { ClockApplicationAlarmComponent } from './clock-application/clock-application-alarm/clock-application-alarm.component';
 import { ClockApplicationCountdownTimerComponent } from './clock-application/clock-application-countdown-timer/clock-application-countdown-timer.component';
+import { StopwatchTimePipe } from './clock-application/pipes/stopwatch-time.pipe';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { ClockApplicationCountdownTimerComponent } from './clock-application/clo
     SafePipe,
     ClockApplicationWorldClocksComponent,
     ClockApplicationAlarmComponent,
-    ClockApplicationCountdownTimerComponent
+    ClockApplicationCountdownTimerComponent,
+    StopwatchTimePipe
   ],
   imports: [
     BrowserModule,
