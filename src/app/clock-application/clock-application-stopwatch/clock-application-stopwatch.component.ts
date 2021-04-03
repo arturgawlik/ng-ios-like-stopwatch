@@ -1,4 +1,5 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Timer, TimerState} from './timer';
 
 @Component({
   selector: 'app-clock-application-stopwatch',
@@ -30,37 +31,41 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
     .text-color {
       color: #DA5254;
     }
-    .font-monospace {
-      font-variant-numeric: tabular-nums;
-    }
   `],
   template: `
     <div class="text-white flex flex-col">
-      <div class="font-size font-thin mt-28 text-center font-monospace">
-        {{currentTime | stopwatchTime}}
+      <div class="font-size font-thin mt-28 text-center tabular-nums">
+        {{timerDisplayedValue | stopwatchTime}}
       </div>
       <div class="flex justify-around mt-12">
-        <div class="rounded-full border-2 border-color">
+        <div *ngIf="isTimerFresh || isTimerRunning" class="rounded-full border-2 border-color">
           <button
-            (click)="roundClick()"
+            [disabled]="isTimerFresh"
             class="rounded-full m-1 h-16 w-16 flex items-center justify-center bg-color text-gray-400">
             Runda
+          </button>
+        </div>
+        <div *ngIf="isTimerIdle" class="rounded-full border-2 border-color">
+          <button
+            (click)="restartClick()"
+            class="rounded-full m-1 h-16 w-16 flex items-center justify-center bg-color text-gray-400">
+            Wyzeruj
           </button>
         </div>
         <div class="flex items-center">
           <span class="rounded-full h-2 w-2 bg-white mx-1"></span>
           <span class="rounded-full h-2 w-2 bg-gray-500 mx-1"></span>
         </div>
-        <div *ngIf="!intervalCancellation" class="rounded-full border-2 border-color2">
+        <div *ngIf="isTimerFresh || isTimerIdle" class="rounded-full border-2 border-color2">
           <button
             (click)="startClick()"
             class="rounded-full m-1 h-16 w-16 flex items-center justify-center bg-color2 text-green-500">
             Start
           </button>
         </div>
-        <div *ngIf="intervalCancellation" class="rounded-full border-2 border-color4">
+        <div *ngIf="isTimerRunning" class="rounded-full border-2 border-color4">
           <button
-            (click)="stopRefreshTime()"
+            (click)="idleClick()"
             class="rounded-full m-1 h-16 w-16 flex items-center justify-center bg-color3 text-color">
             Stop
           </button>
@@ -74,31 +79,68 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
     </div>
   `
 })
-export class ClockApplicationStopwatchComponent implements OnInit {
-  currentTime = 0;
-  startTime: number | undefined;
-  intervalCancellation: number | undefined;
-  constructor() {
-  }
-  ngOnInit(): void {
-  }
+export class ClockApplicationStopwatchComponent implements OnInit, OnDestroy{
+  // timerState = TimerState.Fresh;
+  //
+  // currentTime = 0;
+  // startTime: number | undefined;
+  // intervalCancellation: number | undefined;
+  //
+  // startClick(): void {
+  //   this.startTime = Date.now();
+  //   this.startRefreshTime();
+  // }
+  // startRefreshTime(): void {
+  //   this.timerState = TimerState.Running;
+  //   this.intervalCancellation = setInterval(() => {
+  //     if (this.startTime) {
+  //       this.currentTime = Date.now() - this.startTime;
+  //     }
+  //   }, 10);
+  // }
+  // stopRefreshTime(): void {
+  //   this.timerState = TimerState.Idle;
+  //   if (this.intervalCancellation) {
+  //     clearInterval(this.intervalCancellation);
+  //     this.intervalCancellation = undefined;
+  //   }
+  // }
+  private intervalToken: any = null;
+  private timer = new Timer();
+  timerDisplayedValue = 0;
   startClick(): void {
-    this.startTime = Date.now();
-    this.startRefreshTime();
+    if (this.timer.state === TimerState.Fresh) {
+      this.timer.start();
+    }
+    else if (this.timer.state === TimerState.Idle) {
+      this.timer.idleStop();
+    }
   }
-  roundClick(): void {
+  idleClick(): void {
+    if (TimerState.Running === this.timer.state) {
+      this.timer.idle();
+    }
   }
-  startRefreshTime(): void {
-    this.intervalCancellation = setInterval(() => {
-      if (this.startTime) {
-        this.currentTime = Date.now() - this.startTime;
-      }
+  restartClick(): void {
+    this.timer.restart();
+  }
+  get isTimerFresh(): boolean {
+    return this.timer.state === TimerState.Fresh;
+  }
+  get isTimerIdle(): boolean {
+    return this.timer.state === TimerState.Idle;
+  }
+  get isTimerRunning(): boolean {
+    return this.timer.state === TimerState.Running;
+  }
+
+  ngOnInit(): void {
+    this.intervalToken = setInterval(() => {
+      this.timerDisplayedValue = this.timer.value;
     }, 10);
   }
-  stopRefreshTime(): void {
-    if (this.intervalCancellation) {
-      clearInterval(this.intervalCancellation);
-      this.intervalCancellation = undefined;
-    }
+
+  ngOnDestroy(): void {
+    clearInterval(this.intervalToken);
   }
 }
