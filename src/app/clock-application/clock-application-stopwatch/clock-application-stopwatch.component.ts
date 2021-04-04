@@ -40,7 +40,9 @@ import {Timer, TimerState} from './timer';
       <div class="flex justify-around mt-12">
         <div *ngIf="isTimerFresh || isTimerRunning" class="rounded-full border-2 border-color">
           <button
+            (click)="roundClick()"
             [disabled]="isTimerFresh"
+            [class.text-gray-600]="isTimerFresh"
             class="rounded-full m-1 h-16 w-16 flex items-center justify-center bg-color text-gray-400">
             Runda
           </button>
@@ -71,58 +73,66 @@ import {Timer, TimerState} from './timer';
           </button>
         </div>
       </div>
-      <div class="mt-5">
-        <div class="border-t mx-4 border-color3 h-12"></div>
-        <div class="border-t mx-4 border-color3 h-12"></div>
-        <div class="border-t mx-4 border-color3 h-12"></div>
+      <div class="mt-5 overflow-scroll h-36">
+        <div
+          *ngIf="isTimerRunning || isTimerIdle"
+          class="border-t mx-4 border-color3 h-12 flex items-center text-xl font-extralight">
+          <div>
+            Runda {{savedRounds.length + 1}}
+          </div>
+          <div class="ml-auto tabular-nums">
+            {{roundTimerDisplayedValue | stopwatchTime}}
+          </div>
+        </div>
+        <div
+          *ngFor="let savedRound of savedRounds.reverse(); index as i"
+          class="border-t mx-4 border-color3 h-12 flex items-center text-xl font-extralight">
+          <div>
+            Runda {{savedRounds.length - i}}
+          </div>
+          <div class="ml-auto tabular-nums">
+            {{savedRound | stopwatchTime}}
+          </div>
+        </div>
+        <div class="border-t mx-4 border-color3 h-12" *ngIf="isTimerFresh"></div>
+        <div class="border-t mx-4 border-color3 h-12" *ngIf="savedRounds.length === 0"></div>
+        <div class="border-t mx-4 border-color3 h-12" *ngIf="savedRounds.length <= 1"></div>
       </div>
     </div>
   `
 })
 export class ClockApplicationStopwatchComponent implements OnInit, OnDestroy{
-  // timerState = TimerState.Fresh;
-  //
-  // currentTime = 0;
-  // startTime: number | undefined;
-  // intervalCancellation: number | undefined;
-  //
-  // startClick(): void {
-  //   this.startTime = Date.now();
-  //   this.startRefreshTime();
-  // }
-  // startRefreshTime(): void {
-  //   this.timerState = TimerState.Running;
-  //   this.intervalCancellation = setInterval(() => {
-  //     if (this.startTime) {
-  //       this.currentTime = Date.now() - this.startTime;
-  //     }
-  //   }, 10);
-  // }
-  // stopRefreshTime(): void {
-  //   this.timerState = TimerState.Idle;
-  //   if (this.intervalCancellation) {
-  //     clearInterval(this.intervalCancellation);
-  //     this.intervalCancellation = undefined;
-  //   }
-  // }
   private intervalToken: any = null;
   private timer = new Timer();
+  private roundTimer = new Timer();
   timerDisplayedValue = 0;
+  roundTimerDisplayedValue = 0;
+  savedRounds: number[] = [];
   startClick(): void {
     if (this.timer.state === TimerState.Fresh) {
       this.timer.start();
+      this.roundTimer.start();
     }
     else if (this.timer.state === TimerState.Idle) {
       this.timer.idleStop();
+      this.roundTimer.idleStop();
     }
   }
   idleClick(): void {
     if (TimerState.Running === this.timer.state) {
       this.timer.idle();
+      this.roundTimer.idle();
     }
   }
   restartClick(): void {
     this.timer.restart();
+    this.roundTimer.restart();
+    this.savedRounds = [];
+  }
+  roundClick(): void {
+    this.savedRounds.push(this.roundTimer.value);
+    this.roundTimer.restart();
+    this.roundTimer.start();
   }
   get isTimerFresh(): boolean {
     return this.timer.state === TimerState.Fresh;
@@ -137,6 +147,7 @@ export class ClockApplicationStopwatchComponent implements OnInit, OnDestroy{
   ngOnInit(): void {
     this.intervalToken = setInterval(() => {
       this.timerDisplayedValue = this.timer.value;
+      this.roundTimerDisplayedValue = this.roundTimer.value;
     }, 10);
   }
 
