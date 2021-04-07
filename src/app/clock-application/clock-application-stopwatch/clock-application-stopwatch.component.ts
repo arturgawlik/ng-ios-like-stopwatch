@@ -31,6 +31,14 @@ import {Timer, TimerState} from './timer';
     .text-color {
       color: #DA5254;
     }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+    }
   `],
   template: `
     <div class="text-white flex flex-col">
@@ -73,7 +81,7 @@ import {Timer, TimerState} from './timer';
           </button>
         </div>
       </div>
-      <div class="mt-5 overflow-scroll h-36">
+      <div class="mt-5 overflow-scroll h-36 no-scrollbar">
         <div
           *ngIf="isTimerRunning || isTimerIdle"
           class="border-t mx-4 border-color3 h-12 flex items-center text-xl font-extralight">
@@ -85,7 +93,7 @@ import {Timer, TimerState} from './timer';
           </div>
         </div>
         <div
-          *ngFor="let savedRound of savedRounds.reverse(); index as i"
+          *ngFor="let savedRound of savedRoundsReversed; index as i"
           class="border-t mx-4 border-color3 h-12 flex items-center text-xl font-extralight">
           <div>
             Runda {{savedRounds.length - i}}
@@ -108,6 +116,9 @@ export class ClockApplicationStopwatchComponent implements OnInit, OnDestroy{
   timerDisplayedValue = 0;
   roundTimerDisplayedValue = 0;
   savedRounds: number[] = [];
+  get savedRoundsReversed(): number[] {
+    return this.savedRounds.reverse();
+  }
   startClick(): void {
     if (this.timer.state === TimerState.Fresh) {
       this.timer.start();
@@ -130,7 +141,8 @@ export class ClockApplicationStopwatchComponent implements OnInit, OnDestroy{
     this.savedRounds = [];
   }
   roundClick(): void {
-    this.savedRounds.push(this.roundTimer.value);
+    const roundTimerValue = this.roundTimer.value;
+    this.savedRounds.push(roundTimerValue);
     this.roundTimer.restart();
     this.roundTimer.start();
   }
