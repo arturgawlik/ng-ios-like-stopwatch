@@ -43,7 +43,9 @@ import {Timer, TimerState} from './timer';
   template: `
     <div class="text-white flex flex-col">
       <div class="font-size font-thin mt-28 text-center tabular-nums">
-        {{timerDisplayedValue | stopwatchTime}}
+        <p class="text-white">
+          {{timerDisplayedValue | stopwatchTime}}
+        </p>
       </div>
       <div class="flex justify-around mt-12">
         <div *ngIf="isTimerFresh || isTimerRunning" class="rounded-full border-2 border-color">
@@ -93,7 +95,7 @@ import {Timer, TimerState} from './timer';
           </div>
         </div>
         <div
-          *ngFor="let savedRound of savedRoundsReversed; index as i"
+          *ngFor="let savedRound of savedRounds; index as i"
           class="border-t mx-4 border-color3 h-12 flex items-center text-xl font-extralight">
           <div>
             Runda {{savedRounds.length - i}}
@@ -116,9 +118,6 @@ export class ClockApplicationStopwatchComponent implements OnInit, OnDestroy{
   timerDisplayedValue = 0;
   roundTimerDisplayedValue = 0;
   savedRounds: number[] = [];
-  get savedRoundsReversed(): number[] {
-    return this.savedRounds.reverse();
-  }
   startClick(): void {
     if (this.timer.state === TimerState.Fresh) {
       this.timer.start();
@@ -142,7 +141,7 @@ export class ClockApplicationStopwatchComponent implements OnInit, OnDestroy{
   }
   roundClick(): void {
     const roundTimerValue = this.roundTimer.value;
-    this.savedRounds.push(roundTimerValue);
+    this.savedRounds.unshift(roundTimerValue);
     this.roundTimer.restart();
     this.roundTimer.start();
   }
